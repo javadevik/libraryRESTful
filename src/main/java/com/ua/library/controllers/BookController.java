@@ -44,35 +44,14 @@ public class BookController {
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 
-    @GetMapping("/title")
-    public ResponseEntity<BookEntity> findByTitle(@RequestParam String title) {
-        BookEntity bookFound = bookService.findAllByTitle(title);
-        return bookFound != null
-                ? new ResponseEntity<>(bookFound, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    }
-
-    @GetMapping("/genre")
-    public ResponseEntity<List<BookEntity>> findAllByGenre(@RequestParam String genre) {
-        List<BookEntity> books = bookService.findAllByGenre(genre);
-        return new ResponseEntity<>(books, HttpStatus.OK);
-    }
-
-    @GetMapping("/year")
-    public ResponseEntity<List<BookEntity>> findAllByYear(@RequestParam Integer year) {
-        List<BookEntity> books = bookService.findAllByYear(year);
-        return new ResponseEntity<>(books, HttpStatus.OK);
-    }
-
-    @GetMapping("/publisher")
-    public ResponseEntity<List<BookEntity>> findAllByPublisher(@RequestParam String publisher) {
-        List<BookEntity> books = bookService.findAllByPublisher(publisher);
-        return new ResponseEntity<>(books, HttpStatus.OK);
-    }
-
-    @GetMapping("/numberOfPage")
-    public ResponseEntity<List<BookEntity>> findAllByNumberOfPage(@RequestParam Integer numberOfPage) {
-        List<BookEntity> books = bookService.findAllByNumberOfPage(numberOfPage);
+    @GetMapping("/search")
+    public ResponseEntity<List<BookEntity>> search(@RequestParam(required = false) String title,
+                                                   @RequestParam(required = false) String author,
+                                                   @RequestParam(required = false) String genre,
+                                                   @RequestParam(required = false) Integer year,
+                                                   @RequestParam(required = false) String publisher,
+                                                   @RequestParam(required = false) Integer numberOfPage) {
+        List<BookEntity> books = bookService.search(title, author, genre, year, publisher, numberOfPage);
         return new ResponseEntity<>(books, HttpStatus.OK);
     }
 

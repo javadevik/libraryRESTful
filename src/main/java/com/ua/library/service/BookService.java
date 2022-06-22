@@ -12,15 +12,8 @@ public interface BookService {
 
     List<BookEntity> findAllFree();
 
-    BookEntity findAllByTitle(String title);
-
-    List<BookEntity> findAllByYear(Integer year);
-
-    List<BookEntity> findAllByGenre(String genre);
-
-    List<BookEntity> findAllByPublisher(String publisher);
-
-    List<BookEntity> findAllByNumberOfPage(Integer numberOfPage);
+    List<BookEntity> search(String title, String author, String genre,
+                            Integer year, String publisher, Integer numberOfPage);
 
     BookEntity save(BookEntity book);
 
@@ -29,4 +22,5 @@ public interface BookService {
     BookEntity setExcludedStatus(Long bookId, String reasonExcluded) throws Exception;
 
     void delete(Long bookId) throws Exception;
+
 }

@@ -10,8 +10,8 @@ import com.ua.library.service.BookStrippedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService, BookStrippedService {
@@ -42,28 +42,23 @@ public class BookServiceImpl implements BookService, BookStrippedService {
     }
 
     @Override
-    public BookEntity findAllByTitle(String title) {
-        return bookRepository.findByTitle(title);
-    }
+    public List<BookEntity> search(String title, String author, String genre,
+                                   Integer year, String publisher, Integer numberOfPage) {
+        if (title != null) {
+            return Collections.singletonList(bookRepository.findByTitle(title));
+        } else if(author != null) {
+            return bookRepository.findAllByAuthor(author);
+        } else if (genre != null) {
+            return bookRepository.findAllByGenre(genre);
+        } else if (year != null) {
+            return bookRepository.findAllByYear(year);
+        } else if (publisher != null) {
+            return bookRepository.findAllByPublisher(publisher);
+        } else if (numberOfPage != null) {
+            return bookRepository.findAllByNumberOfPage(numberOfPage);
+        }
 
-    @Override
-    public List<BookEntity> findAllByYear(Integer year) {
-        return bookRepository.findAllByYear(year);
-    }
-
-    @Override
-    public List<BookEntity> findAllByGenre(String genre) {
-        return bookRepository.findAllByGenre(genre);
-    }
-
-    @Override
-    public List<BookEntity> findAllByPublisher(String publisher) {
-        return bookRepository.findAllByPublisher(publisher);
-    }
-
-    @Override
-    public List<BookEntity> findAllByNumberOfPage(Integer numberOfPage) {
-        return bookRepository.findAllByNumberOfPage(numberOfPage);
+        return null;
     }
 
     @Override
