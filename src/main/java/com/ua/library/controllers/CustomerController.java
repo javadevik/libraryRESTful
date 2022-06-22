@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/customers")
@@ -38,49 +39,16 @@ public class CustomerController {
         return new ResponseEntity<>(customers, HttpStatus.OK);
     }
 
-    @GetMapping("/firstName/lastName")
-    public ResponseEntity<List<CustomerEntity>> findAllByFirstNameAndLastName(@RequestParam String firstName,
-                                                                              @RequestParam String lastName) {
-        List<CustomerEntity> customers = customerService.findAllByFirstNameAndLastName(firstName, lastName);
+    @GetMapping("/search")
+    public ResponseEntity<List<CustomerEntity>> search(@RequestParam(required = false) String firstName,
+                                                       @RequestParam(required = false) String lastName,
+                                                       @RequestParam(required = false) String birthDate,
+                                                       @RequestParam(required = false) String address,
+                                                       @RequestParam(required = false) String workPlace,
+                                                       @RequestParam(required = false) String passport) {
+        List<CustomerEntity> customers = customerService.search(firstName, lastName,
+                birthDate, address, workPlace, passport);
         return new ResponseEntity<>(customers, HttpStatus.OK);
-    }
-
-    @GetMapping("/firstName")
-    public ResponseEntity<List<CustomerEntity>> findAllByFirstName(@RequestParam String firstName) {
-        List<CustomerEntity> customers = customerService.findAllByFirstName(firstName);
-        return new ResponseEntity<>(customers, HttpStatus.OK);
-    }
-
-    @GetMapping("/lastName")
-    public ResponseEntity<List<CustomerEntity>> findAllByLastName(@RequestParam String lastName) {
-        List<CustomerEntity> customers = customerService.findAllByLastName(lastName);
-        return new ResponseEntity<>(customers, HttpStatus.OK);
-    }
-
-    @GetMapping("/birthDate")
-    public ResponseEntity<List<CustomerEntity>> findAllByBirthDate(@RequestParam String birthDate) {
-        List<CustomerEntity> customers = customerService.findAllByDateBirth(birthDate);
-        return new ResponseEntity<>(customers, HttpStatus.OK);
-    }
-
-    @GetMapping("/address")
-    public ResponseEntity<List<CustomerEntity>> findAllByAddress(@RequestParam String address) {
-        List<CustomerEntity> customers = customerService.findAllByAddress(address);
-        return new ResponseEntity<>(customers, HttpStatus.OK);
-    }
-
-    @GetMapping("/workPlace")
-    public ResponseEntity<List<CustomerEntity>> findAllByWorkPlace(@RequestParam String workPlace) {
-        List<CustomerEntity> customers = customerService.findAllByWorkPlace(workPlace);
-        return new ResponseEntity<>(customers, HttpStatus.OK);
-    }
-
-    @GetMapping("/passport")
-    public ResponseEntity<CustomerEntity> findByPassport(@RequestParam String passport) {
-        CustomerEntity customer = customerService.findByPassport(passport);
-        return customer != null
-                ? new ResponseEntity<>(customer, HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping

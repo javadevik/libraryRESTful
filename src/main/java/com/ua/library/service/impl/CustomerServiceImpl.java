@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -39,39 +40,27 @@ public class CustomerServiceImpl implements CustomerService, CustomerStrippedSer
     }
 
     @Override
-    public List<CustomerEntity> findAllByFirstNameAndLastName(String firstName, String lastName) {
-        return customerRepository.findAllByFirstNameAndLastName(firstName, lastName);
-    }
+    public List<CustomerEntity> search(String firstName, String lastName,
+                                      String birthDate, String address,
+                                      String workPlace, String passport) {
+        if (passport != null)
+            return Collections.singletonList(customerRepository.findByPassport(passport));
 
-    @Override
-    public List<CustomerEntity> findAllByFirstName(String firstName) {
-        return customerRepository.findAllByFirstName(firstName);
-    }
+        if (firstName != null && lastName != null) {
+            return customerRepository.findAllByFirstNameAndLastName(firstName, lastName);
+        } else if (firstName != null) {
+            return customerRepository.findAllByFirstName(firstName);
+        } else if (lastName != null) {
+            return customerRepository.findAllByLastName(lastName);
+        } else if (birthDate != null) {
+            Timestamp date = dateService.parseToTimestamp(birthDate);
+            return customerRepository.findAllByBirthDate(date);
+        } if (address != null) {
+            return customerRepository.findAllByAddress(address);
+        } else if (workPlace != null)
+            return customerRepository.findAllByWorkPlace(workPlace);
 
-    @Override
-    public List<CustomerEntity> findAllByLastName(String lastName) {
-        return customerRepository.findAllByLastName(lastName);
-    }
-
-    @Override
-    public List<CustomerEntity> findAllByDateBirth(String birthDate) {
-        Timestamp bDate = dateService.parseToTimestamp(birthDate);
-        return customerRepository.findAllByBirthDate(bDate);
-    }
-
-    @Override
-    public List<CustomerEntity> findAllByAddress(String address) {
-        return customerRepository.findAllByAddress(address);
-    }
-
-    @Override
-    public List<CustomerEntity> findAllByWorkPlace(String workPlace) {
-        return customerRepository.findAllByWorkPlace(workPlace);
-    }
-
-    @Override
-    public CustomerEntity findByPassport(String passport) {
-        return customerRepository.findByPassport(passport);
+        return null;
     }
 
     @Override
